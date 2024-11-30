@@ -5,8 +5,7 @@ public class Account {
     protected int depositCount = 0;
     protected int withdrawCount = 0;
     protected float taePercent;
-    protected float monthlyComm = 0.00f;  // monthly commission
-    // protected float amount = 0.00f;  // quantity to deposit or withdraw
+    protected float monthlyComm = 0.00f;
     protected float interestAmount = 0.00f;
 
     public Account (float balance, float taePercent) {
@@ -83,14 +82,14 @@ public class Account {
     // Retirar una cantidad de dinero en la cuenta actualizando su saldo. El valor a retirar no debe superar el saldo
     public void withdraw(float amount) {
         if (amount <= 0) {
-            throw new IllegalArgumentException("Error: Withdraw must be greater than 0. Value: " + amount);
+            throw new IllegalArgumentException("Error: Withdrawal must be greater than 0. Value: " + amount);
         } else if (amount > getBalance()) {
             throw new IllegalArgumentException(
-                    String.format("Error: Withdraw amount %.2f exceeds balance %.2f.", amount, getBalance()));
+                    String.format("Error: Withdrawn amount %.2f exceeds balance %.2f.", amount, getBalance()));
         }        
         setWithdrawCount(getWithdrawCount() + 1);
         setBalance(getBalance() - amount);
-        System.out.println(String.format("Withdraw number: %d | Withdraw amount: %.2f | New balance: %.2f", getWithdrawCount(), amount, getBalance()));
+        System.out.println(String.format("Withdrawal number: %d | Withdrawal amount: %.2f | New balance: %.2f", getWithdrawCount(), amount, getBalance()));
     }
 
     // Calcular el interés mensual de la cuenta y actualiza el saldo correspondiente
@@ -103,8 +102,15 @@ public class Account {
     // Extracto mensual: actualiza el saldo restándole la comisión mensual y calculando el interés mensual
     // correspondiente (invoca el método anterior)
     public void monthlyExtract (float monthlyComm) {
+        calcInterest();
+        interestAmount = getInterestAmount();
         setBalance(getBalance() - monthlyComm + getInterestAmount());
-        System.out.println(String.format("Monthly commission: %.2f | New balance: %.2f", monthlyComm, getBalance()));
+        System.out.println(String.format("Monthly interest: %.2f | Monthly commission: %.2f | New balance: %.2f", interestAmount, monthlyComm, getBalance()));
     }
 
-}
+    public void printAccount(){
+        System.out.println(String.format("Balance: %.2f | Monthly commission: %.2f | Calculated interest: %.2f with TAE: %.2f| Number of deposits: %d | Number of withdrawals: %d", 
+                                                    getBalance(), getMonthlyComm(), getInterestAmount(), getTaePercent(), getDepositCount() + getWithdrawCount()));
+    }
+
+} 

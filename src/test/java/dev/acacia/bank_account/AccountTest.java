@@ -1,104 +1,68 @@
 package dev.acacia.bank_account;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AccountTest {
-    @Test
-    void testCalcInterest() {
 
+    private Account account;
+
+    @BeforeEach
+    void setUp() {
+        account = new Account(1_000.00f, 3.50f); // Inicializar la cuenta antes de cada test
     }
-
+  
+    @Test
+    void testAccountDefaultConstructor() {
+        Account account = new Account();
+        assertEquals(0.00f, account.getBalance(), 0.001f); // 0.001f es la tolerancia permitida en las operaciones con float
+        assertEquals(0.00f, account.getTaePercent(), 0.001f);
+    }
+    
     @Test
     void testDepositCount() {
-        Account account = new Account(1_000.00f, 3.50f);
-        account.deposit(100.00f);
-        assertTrue(account.getDepositCount() == 1);
+        float amount = 100.00f;
+        account.deposit(amount);
+        float amount2 = 100.00f;
+        account.deposit(amount2);
+        assertTrue(account.getDepositCount() ==2);
     }
 
     @Test
     void testDepositBalance() {
-        Account account = new Account(1_000.00f, 3.50f);
-        account.deposit(100.00f);
+        float amount = 100.00f;
+        account.deposit(amount);
         assertTrue(account.getBalance() == 1_100.00f);
     }
 
-/*     public void deposit (float amount) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Error: Deposit must be greater than 0. Your amount is: " + amount);
-        }
-        setDepositCount(getDepositCount() + 1); 
-        setBalance(getBalance() + amount);
-        System.out.println(String.format("Deposit number: %d | Deposit amount: %.2f | New balance: %.2f", getDepositCount(), amount, getBalance()));
-    } */
-
     @Test
-    void testGetBalance() {
-
+    void testWithdrawCount() {
+        float amount = 100.00f;
+        account.withdraw(amount);
+        assertTrue(account.getWithdrawCount() == 1);
     }
 
     @Test
-    void testGetDepositCount() {
-
+    void testCalcInterest() {
+        account.calcInterest();
+        assertEquals(account.getInterestAmount(), 2.9166667f);
     }
 
     @Test
-    void testGetInterestAmount() {
-
-    }
-
-    @Test
-    void testGetMonthlyComm() {
-
-    }
-
-    @Test
-    void testGetTaePercent() {
-
-    }
-
-    @Test
-    void testGetWithdrawCount() {
-
+    void testGetAndSetMonthlyComm() {
+        float monthlyComm = 30.00f;
+        account.setMonthlyComm(monthlyComm);
+        assertEquals(account.getMonthlyComm(), monthlyComm);
     }
 
     @Test
     void testMonthlyExtract() {
-
+        float monthlyComm = 30.00f;
+        account.calcInterest();
+        account.monthlyExtract(monthlyComm);
+        assertEquals(account.getBalance(), 975.8334f);
     }
 
-    @Test
-    void testSetBalance() {
-
-    }
-
-    @Test
-    void testSetDepositCount() {
-
-    }
-
-    @Test
-    void testSetInterestAmount() {
-
-    }
-
-    @Test
-    void testSetMonthlyComm() {
-
-    }
-
-    @Test
-    void testSetTaePercent() {
-
-    }
-
-    @Test
-    void testSetWithdrawCount() {
-
-    }
-
-    @Test
-    void testWithdraw() {
-
-    }
 }
