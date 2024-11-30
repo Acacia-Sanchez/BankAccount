@@ -19,13 +19,18 @@ public class CheckingAccount extends Account {
     public void setOverdraft(float overdraft) {
         this.overdraft = overdraft;
     }
+    @Override  // elimina la "prohibición" de saldo negativo de la clase padre
+    public void setBalance(float balance){
+        this.balance = balance;
+    }
 
     // Consignar: invoca al método heredado. Si hay sobregiro, la cantidad consignada reduce el sobregiro.
     @Override
     public void deposit(float amount) {
         if (getBalance() < 0) {
+            setDepositCount((getDepositCount() + 1));
             setOverdraft(getBalance());
-            super.setBalance(getBalance() + amount);
+            setBalance(getBalance() + amount);
             System.out.println(String.format("Previous overdraft: %.2f | Now overdraft reduced: %.2f | New balance: %.2f", getOverdraft(), amount, getBalance()));
         } else {
             super.deposit(amount);
@@ -36,7 +41,13 @@ public class CheckingAccount extends Account {
     // superior al saldo. El dinero que se debe queda como sobregiro.
     @Override
     public void withdraw(float amount) {
-        super.withdraw(amount);
+        if (getBalance() >= 0) {
+            super.withdraw(amount);  // solo llama a la clase padre en caso de saldo positivo, para que no lance la Illegal Exception
+        } else {
+            setWithdrawCount((getWithdrawCount() + 1));
+            setBalance(getBalance() + amount);
+            System.out.println(String.format("After withdraw: %.2f | Balance: %.2f | Now overdraft: %.2f", amount, getBalance(), getOverdraft()));
+        }
         if (getBalance() < 0) {
             setOverdraft(getBalance());
             System.out.println(String.format("After withdraw: %.2f | Balance: %.2f | Now overdraft: %.2f", amount, getBalance(), getOverdraft()));
