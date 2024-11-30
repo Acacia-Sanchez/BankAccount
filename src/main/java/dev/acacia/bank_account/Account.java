@@ -102,10 +102,9 @@ public class Account {
     // Extracto mensual: actualiza el saldo restándole la comisión mensual y calculando el interés mensual
     // correspondiente (invoca el método anterior)
     public void monthlyExtract (float monthlyComm) {
-        calcInterest();
-        interestAmount = getInterestAmount();
-        setBalance(getBalance() - monthlyComm + getInterestAmount());
-        System.out.println(String.format("Monthly interest: %.2f | Monthly commission: %.2f | New balance: %.2f", interestAmount, monthlyComm, getBalance()));
+        calcInterest();  // aquí ya suma el interés
+        setBalance(getBalance() - monthlyComm);
+        System.out.println(String.format("Monthly interest: %.2f | Monthly commission: %.2f | New balance: %.2f", getInterestAmount(), monthlyComm, getBalance()));
     }
 
     public void printAccount(){

@@ -60,9 +60,8 @@ public class AccountTest {
     @Test
     void testMonthlyExtract() {
         float monthlyComm = 30.00f;
-        account.calcInterest();
         account.monthlyExtract(monthlyComm);
-        assertEquals(account.getBalance(), 975.8334f);
+        assertEquals(account.getBalance(), 972.9167f);
     }
 
 }
